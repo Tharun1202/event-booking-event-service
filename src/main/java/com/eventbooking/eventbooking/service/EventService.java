@@ -1,12 +1,15 @@
 package com.eventbooking.eventbooking.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.eventbooking.eventbooking.Dto.Request.CreateEventRequest;
+import com.eventbooking.eventbooking.Dto.Request.UpdateEventRequest;
 import com.eventbooking.eventbooking.Dto.Response.AdminEventResponse;
 import com.eventbooking.eventbooking.Dto.Response.EventResponse;
 import com.eventbooking.eventbooking.model.Event;
@@ -72,9 +75,125 @@ public class EventService {
        return response;
     } 
 
-    public List<EventResponse> getAllEvent()
+    public List<EventResponse> getActiveEventsforUsers()
     {
+        List<Event> events = eventrepo.findByStatusAndEndDateTimeAfterOrderByStartDateTimeAsc(EventStatus.ACTIVE,LocalDateTime.now());
+        List<EventResponse> response = new ArrayList<>();
+        for(Event e : events )
+        {   
+            int remainingSeats = 0;
+            boolean isAvailable = false ;
+            if(e.getBookedCount()<e.getTotalCapacity())
+            {
+                isAvailable=true;
+                remainingSeats = e.getTotalCapacity() - e.getBookedCount();
+            }
+            EventResponse resp = new EventResponse();
+            resp.setArtistName(e.getArtistName());
+            resp.setEventId(e.getEventId());
+            resp.setEventName(e.getEventName());
+            resp.setStartDateTime(e.getStartDateTime());
+            resp.setEndDateTime(e.getEndDateTime());
+            resp.setBookable(isAvailable);
+            resp.setRemainingSeats(remainingSeats);
+            resp.setVenue(e.getVenue());
+            response.add(resp);
+        }
+
+
+        return response;
+    }
+
+    public List<AdminEventResponse> getActiveEventsForAdmins()
+    {
+        List<Event> event = eventrepo.findByStatusAndEndDateTimeAfterOrderByStartDateTimeAsc(EventStatus.ACTIVE,LocalDateTime.now());
+        List<AdminEventResponse> response = new ArrayList<>();
+        for(Event e : event)
+        {
+            AdminEventResponse resp = new AdminEventResponse();
+            resp.setEventId(e.getEventId());
+            resp.setEventName(e.getEventName());
+            resp.setArtistName(e.getArtistName());
+            resp.setVenue(e.getVenue());
+            resp.setStartDateTime(e.getStartDateTime());
+            resp.setEndDateTime(e.getEndDateTime());
+            resp.setBookedCount(e.getBookedCount());
+            resp.setTotalCapacity(e.getTotalCapacity());
+            resp.setCreatedAt(e.getCreatedAt());
+            resp.setUpdatedAt(e.getUpdatedAt());
+            resp.setStatus(e.getStatus());
+            
+            response.add(resp);
+        }
+        return response;
+    }
+
+    public AdminEventResponse updateEvent(UpdateEventRequest request , Integer Eventid)
+    {
+        Event event = eventrepo.findById(Eventid)
+        .orElseThrow(() -> new IllegalArgumentException("Event not found"));
         
+        if(event.getStatus() == EventStatus.CANCELLED ||event.getStatus() == EventStatus.COMPLETED)
+        {
+            throw new IllegalArgumentException("Cannot update this event");
+        }
+        if(request.getEventName()!=null)
+        {
+            event.setEventName(request.getEventName());
+        }
+        if(request.getArtistName()!=null)
+        {
+            event.setArtistName(request.getArtistName());
+        }
+        if(request.getVenue()!=null)
+        {
+            event.setVenue(request.getVenue());
+        }
+        if(request.getStartDateTime()!=null)
+        {
+            event.setStartDateTime(request.getStartDateTime());
+        }
+        if(request.getEndDateTime()!=null)
+        {
+            event.setEndDateTime(request.getEndDateTime());
+        }
+        if(request.getTotalCapacity()!=null && request.getTotalCapacity()>0)
+        {
+            if(request.getTotalCapacity() < event.getBookedCount()) 
+            {
+                throw new IllegalArgumentException("Capacity cannot be less than booked seats");
+            }
+            event.setTotalCapacity(request.getTotalCapacity());
+        }
+        event.setUpdatedAt(timeStamp());
+        eventrepo.save(event);
+        AdminEventResponse response = new AdminEventResponse();
+        response.setEventId(Eventid);
+        response.setArtistName(event.getArtistName());
+        response.setEventName(event.getEventName());
+        response.setVenue(event.getVenue());
+        response.setCreatedAt(event.getCreatedAt());
+        response.setUpdatedAt(event.getUpdatedAt());
+        response.setBookedCount(event.getBookedCount());
+        response.setStartDateTime(event.getStartDateTime());
+        response.setEndDateTime(event.getEndDateTime());
+        response.setStatus(event.getStatus());
+        response.setTotalCapacity(event.getTotalCapacity());
+        
+        return response;
+    }
+
+    public void deleteEvent(Integer eventId)
+    {
+        Optional<Event> e = eventrepo.findById(eventId);
+        if(!e.isPresent())
+        {
+            throw new IllegalArgumentException("Event does not exists");
+        }
+        Event event = e.get();
+        event.setStatus(EventStatus.DELETED);
+        eventrepo.save(event);
+
     }
 
     public LocalDateTime timeStamp()

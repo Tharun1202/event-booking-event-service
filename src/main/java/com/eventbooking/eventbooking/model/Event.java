@@ -2,6 +2,8 @@ package com.eventbooking.eventbooking.model;
 
 import java.time.LocalDateTime;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,6 +19,7 @@ public class Event {
     private String venue;
     private Integer totalCapacity;
     private Integer bookedCount;
+    @Enumerated(EnumType.STRING)
     private EventStatus status;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;

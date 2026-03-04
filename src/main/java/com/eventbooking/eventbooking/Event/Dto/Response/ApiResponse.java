@@ -1,4 +1,4 @@
-package com.eventbooking.eventbooking.Dto.Response;
+package com.eventbooking.eventbooking.Event.Dto.Response;
 
 import org.springframework.stereotype.Component;
 

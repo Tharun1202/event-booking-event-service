@@ -1,4 +1,4 @@
-package com.eventbooking.eventbooking.repository;
+package com.eventbooking.eventbooking.Booking.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.eventbooking.eventbooking.model.Booking;
-import com.eventbooking.eventbooking.model.BookingStatus;
+import com.eventbooking.eventbooking.Booking.models.Booking;
+import com.eventbooking.eventbooking.Booking.models.BookingStatus;
 
 public interface BookingRepository extends JpaRepository<Booking,Integer>{
     

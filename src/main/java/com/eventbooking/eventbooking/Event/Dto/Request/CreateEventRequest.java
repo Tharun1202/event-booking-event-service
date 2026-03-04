@@ -1,21 +1,29 @@
-package com.eventbooking.eventbooking.Dto.Request;
+package com.eventbooking.eventbooking.Event.Dto.Request;
 
 import java.time.LocalDateTime;
 
-public class UpdateEventRequest {
-    private String eventName;
-    private String artistName;
-    private String venue;
-    private Integer totalCapacity;
-    private LocalDateTime startDateTime;
-    private LocalDateTime endDateTime;
+import jakarta.validation.constraints.NotBlank;
 
-    public UpdateEventRequest()
+public class CreateEventRequest {
+    @NotBlank
+    private String eventName;
+    @NotBlank
+    private String artistName;
+    @NotBlank
+    private String venue;
+    @NotBlank
+    private Integer totalCapacity;
+    @NotBlank
+    private LocalDateTime startDateTime;
+    @NotBlank
+    private LocalDateTime endDateTime;
+    
+    public CreateEventRequest()
     {
-        
+
     }
 
-    public UpdateEventRequest(String eventName, String artistName, String venue, Integer totalCapacity,
+    public CreateEventRequest(String eventName, String artistName, String venue, Integer totalCapacity,
             LocalDateTime startDateTime, LocalDateTime endDateTime) {
         this.eventName = eventName;
         this.artistName = artistName;
@@ -61,6 +69,6 @@ public class UpdateEventRequest {
         this.endDateTime = endDateTime;
     }
 
-
     
+
 }

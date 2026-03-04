@@ -1,9 +1,9 @@
-package com.eventbooking.eventbooking.Dto.Response;
+package com.eventbooking.eventbooking.Booking.Dto.Response;
 
 import java.time.LocalDateTime;
 
-import com.eventbooking.eventbooking.model.BookingStatus;
-import com.eventbooking.eventbooking.model.EventStatus;
+import com.eventbooking.eventbooking.Booking.models.BookingStatus;
+import com.eventbooking.eventbooking.Event.model.EventStatus;
 
 public class BookingCancellationResponse {
    private Integer bookingId;

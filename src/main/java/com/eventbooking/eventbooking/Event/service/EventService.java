@@ -1,4 +1,4 @@
-package com.eventbooking.eventbooking.service;
+package com.eventbooking.eventbooking.Event.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -8,13 +8,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.eventbooking.eventbooking.Dto.Request.CreateEventRequest;
-import com.eventbooking.eventbooking.Dto.Request.UpdateEventRequest;
-import com.eventbooking.eventbooking.Dto.Response.AdminEventResponse;
-import com.eventbooking.eventbooking.Dto.Response.EventResponse;
-import com.eventbooking.eventbooking.model.Event;
-import com.eventbooking.eventbooking.model.EventStatus;
-import com.eventbooking.eventbooking.repository.EventRepository;
+import com.eventbooking.eventbooking.Event.Dto.Request.CreateEventRequest;
+import com.eventbooking.eventbooking.Event.Dto.Request.UpdateEventRequest;
+import com.eventbooking.eventbooking.Event.Dto.Response.AdminEventResponse;
+import com.eventbooking.eventbooking.Event.Dto.Response.EventResponse;
+import com.eventbooking.eventbooking.Event.model.Event;
+import com.eventbooking.eventbooking.Event.model.EventStatus;
+import com.eventbooking.eventbooking.Event.repository.EventRepository;
 
 import jakarta.transaction.Transactional;
 

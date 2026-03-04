@@ -1,4 +1,4 @@
-package com.eventbooking.eventbooking.model;
+package com.eventbooking.eventbooking.Booking.models;
 
 public enum BookingStatus {
 COMPLETED,

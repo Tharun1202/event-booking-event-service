@@ -1,4 +1,4 @@
-package com.eventbooking.eventbooking.Controller;
+package com.eventbooking.eventbooking.Booking.Controller;
 
 import java.util.List;
 
@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.eventbooking.eventbooking.Dto.Request.CreateBookingRequest;
-import com.eventbooking.eventbooking.Dto.Response.ApiResponse;
-import com.eventbooking.eventbooking.Dto.Response.BookingResponse;
-import com.eventbooking.eventbooking.service.BookingService;
+import com.eventbooking.eventbooking.Booking.Dto.Request.CreateBookingRequest;
+import com.eventbooking.eventbooking.Booking.Dto.Response.BookingResponse;
+import com.eventbooking.eventbooking.Booking.service.BookingService;
+import com.eventbooking.eventbooking.Event.Dto.Response.ApiResponse;
 
 @RestController
 public class BookingController {

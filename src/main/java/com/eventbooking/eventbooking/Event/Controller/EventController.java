@@ -1,4 +1,4 @@
-package com.eventbooking.eventbooking.Controller;
+package com.eventbooking.eventbooking.Event.Controller;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.eventbooking.eventbooking.Dto.Request.CreateEventRequest;
-import com.eventbooking.eventbooking.Dto.Request.UpdateEventRequest;
-import com.eventbooking.eventbooking.Dto.Response.AdminEventResponse;
-import com.eventbooking.eventbooking.Dto.Response.ApiResponse;
-import com.eventbooking.eventbooking.Dto.Response.EventResponse;
-import com.eventbooking.eventbooking.service.EventService;
+import com.eventbooking.eventbooking.Event.Dto.Request.CreateEventRequest;
+import com.eventbooking.eventbooking.Event.Dto.Request.UpdateEventRequest;
+import com.eventbooking.eventbooking.Event.Dto.Response.AdminEventResponse;
+import com.eventbooking.eventbooking.Event.Dto.Response.ApiResponse;
+import com.eventbooking.eventbooking.Event.Dto.Response.EventResponse;
+import com.eventbooking.eventbooking.Event.service.EventService;
+
+import jakarta.validation.Valid;
 
 @RestController
 public class EventController {
@@ -64,7 +66,7 @@ public class EventController {
     }
 
     @PatchMapping("/admin/events/{eventId}")
-    public ResponseEntity<ApiResponse<AdminEventResponse>> updateEvent(@RequestBody UpdateEventRequest request , @PathVariable Integer eventId)
+    public ResponseEntity<ApiResponse<AdminEventResponse>> updateEvent(@Valid @RequestBody UpdateEventRequest request , @PathVariable Integer eventId)
     {
         ApiResponse<AdminEventResponse> response = new ApiResponse<>();
         response.setData(eventservice.updateEvent(request, eventId));

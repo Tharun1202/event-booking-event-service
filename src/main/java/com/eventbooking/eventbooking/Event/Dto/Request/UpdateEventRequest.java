@@ -1,39 +1,34 @@
-package com.eventbooking.eventbooking.Dto.Response;
+package com.eventbooking.eventbooking.Event.Dto.Request;
 
 import java.time.LocalDateTime;
+import jakarta.validation.constraints.NotBlank;
 
-public class EventResponse {
-    private Integer eventId;
+
+public class UpdateEventRequest {
+    @NotBlank
     private String eventName;
+    @NotBlank
     private String artistName;
+    @NotBlank
     private String venue;
+    @NotBlank
+    private Integer totalCapacity;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
-    private Integer remainingSeats;
-    private boolean bookable;
-    
-    public EventResponse()
+
+    public UpdateEventRequest()
     {
         
     }
 
-
-    public EventResponse(Integer eventId, String eventName, String artistName, String venue,
-            LocalDateTime startDateTime, LocalDateTime endDateTime, Integer remainingSeats, boolean bookable) {
-        this.eventId = eventId;
+    public UpdateEventRequest(String eventName, String artistName, String venue, Integer totalCapacity,
+            LocalDateTime startDateTime, LocalDateTime endDateTime) {
         this.eventName = eventName;
         this.artistName = artistName;
         this.venue = venue;
+        this.totalCapacity = totalCapacity;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
-        this.remainingSeats = remainingSeats;
-        this.bookable = bookable;
-    }
-    public Integer getEventId() {
-        return eventId;
-    }
-    public void setEventId(Integer eventId) {
-        this.eventId = eventId;
     }
     public String getEventName() {
         return eventName;
@@ -53,6 +48,12 @@ public class EventResponse {
     public void setVenue(String venue) {
         this.venue = venue;
     }
+    public Integer getTotalCapacity() {
+        return totalCapacity;
+    }
+    public void setTotalCapacity(Integer totalCapacity) {
+        this.totalCapacity = totalCapacity;
+    }
     public LocalDateTime getStartDateTime() {
         return startDateTime;
     }
@@ -65,19 +66,7 @@ public class EventResponse {
     public void setEndDateTime(LocalDateTime endDateTime) {
         this.endDateTime = endDateTime;
     }
-    public Integer getRemainingSeats() {
-        return remainingSeats;
-    }
-    public void setRemainingSeats(Integer remainingSeats) {
-        this.remainingSeats = remainingSeats;
-    }
-    public boolean isBookable() {
-        return bookable;
-    }
-    public void setBookable(boolean bookable) {
-        this.bookable = bookable;
-    }
 
-    
+
     
 }

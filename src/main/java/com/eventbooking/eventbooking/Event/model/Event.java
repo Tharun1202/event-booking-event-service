@@ -1,4 +1,4 @@
-package com.eventbooking.eventbooking.model;
+package com.eventbooking.eventbooking.Event.model;
 
 import java.time.LocalDateTime;
 import jakarta.persistence.Entity;

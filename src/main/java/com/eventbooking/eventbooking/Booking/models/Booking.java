@@ -1,6 +1,8 @@
-package com.eventbooking.eventbooking.model;
+package com.eventbooking.eventbooking.Booking.models;
 
 import java.time.LocalDateTime;
+
+import com.eventbooking.eventbooking.Event.model.Event;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

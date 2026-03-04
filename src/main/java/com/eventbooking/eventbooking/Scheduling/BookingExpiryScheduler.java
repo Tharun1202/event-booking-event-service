@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.eventbooking.eventbooking.model.Booking;
-import com.eventbooking.eventbooking.model.BookingStatus;
-import com.eventbooking.eventbooking.model.Event;
-import com.eventbooking.eventbooking.model.EventStatus;
-import com.eventbooking.eventbooking.repository.BookingRepository;
-import com.eventbooking.eventbooking.repository.EventRepository;
+import com.eventbooking.eventbooking.Booking.models.Booking;
+import com.eventbooking.eventbooking.Booking.models.BookingStatus;
+import com.eventbooking.eventbooking.Booking.repository.BookingRepository;
+import com.eventbooking.eventbooking.Event.model.Event;
+import com.eventbooking.eventbooking.Event.model.EventStatus;
+import com.eventbooking.eventbooking.Event.repository.EventRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -29,7 +29,7 @@ public class BookingExpiryScheduler {
     public void expirePendingTransaction()  // this method would expire transactions if expire_ts > now && status == PENDING.
     {
         LocalDateTime time = LocalDateTime.now();
-        System.out.println("Scheduler started at "+time.format(DateTimeFormatter.ofPattern("dd-mm-yyyy HH:mm:ss"))+"....");
+        System.out.println("Scheduler started at "+time.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"))+"....");
         List<Booking> result = bookrepo.findExpiredBooking(BookingStatus.PENDING, time);
         for(Booking b : result)
         {
@@ -46,6 +46,7 @@ public class BookingExpiryScheduler {
             {
                 event.setStatus(EventStatus.ACTIVE);
             }
+            event.setUpdatedAt(time);
             b.setStatus(BookingStatus.EXPIRED);
         }
 

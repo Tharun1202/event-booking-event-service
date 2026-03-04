@@ -1,4 +1,4 @@
-package com.eventbooking.eventbooking.service;
+package com.eventbooking.eventbooking.Booking.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -6,15 +6,16 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.eventbooking.eventbooking.Dto.Request.CreateBookingRequest;
-import com.eventbooking.eventbooking.Dto.Response.BookingCancellationResponse;
-import com.eventbooking.eventbooking.Dto.Response.BookingResponse;
-import com.eventbooking.eventbooking.model.Booking;
-import com.eventbooking.eventbooking.model.BookingStatus;
-import com.eventbooking.eventbooking.model.Event;
-import com.eventbooking.eventbooking.model.EventStatus;
-import com.eventbooking.eventbooking.repository.BookingRepository;
-import com.eventbooking.eventbooking.repository.EventRepository;
+
+import com.eventbooking.eventbooking.Booking.Dto.Request.CreateBookingRequest;
+import com.eventbooking.eventbooking.Booking.Dto.Response.BookingCancellationResponse;
+import com.eventbooking.eventbooking.Booking.Dto.Response.BookingResponse;
+import com.eventbooking.eventbooking.Booking.models.Booking;
+import com.eventbooking.eventbooking.Booking.models.BookingStatus;
+import com.eventbooking.eventbooking.Booking.repository.BookingRepository;
+import com.eventbooking.eventbooking.Event.model.Event;
+import com.eventbooking.eventbooking.Event.model.EventStatus;
+import com.eventbooking.eventbooking.Event.repository.EventRepository;
 
 import jakarta.transaction.Transactional;
 

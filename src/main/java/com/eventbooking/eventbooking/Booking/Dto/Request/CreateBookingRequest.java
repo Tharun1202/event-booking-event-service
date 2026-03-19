@@ -1,13 +1,13 @@
 package com.eventbooking.eventbooking.Booking.Dto.Request;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class CreateBookingRequest {
-    @NotBlank
+    @NotNull
     private Integer eventId;
-    @NotBlank
+    @NotNull
     private Integer userId;
-    @NotBlank
+    @NotNull
     private Integer quantity;
 
     public CreateBookingRequest()

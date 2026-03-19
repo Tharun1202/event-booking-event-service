@@ -54,7 +54,7 @@ public class EventController {
     }
 
     @PostMapping("/admin/create")
-    public ResponseEntity<ApiResponse<AdminEventResponse>> createEvents(@RequestBody CreateEventRequest request)
+    public ResponseEntity<ApiResponse<AdminEventResponse>> createEvents(@Valid @RequestBody CreateEventRequest request)
     {
         ApiResponse<AdminEventResponse> response = new ApiResponse<>();
         response.setData(eventservice.createEvent(request));

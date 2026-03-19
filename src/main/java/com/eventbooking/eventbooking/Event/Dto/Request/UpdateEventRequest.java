@@ -2,6 +2,7 @@ package com.eventbooking.eventbooking.Event.Dto.Request;
 
 import java.time.LocalDateTime;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 
 public class UpdateEventRequest {
@@ -11,7 +12,7 @@ public class UpdateEventRequest {
     private String artistName;
     @NotBlank
     private String venue;
-    @NotBlank
+    @NotNull
     private Integer totalCapacity;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;

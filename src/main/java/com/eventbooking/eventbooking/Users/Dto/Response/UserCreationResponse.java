@@ -7,7 +7,6 @@ import com.eventbooking.eventbooking.Users.model.UserRole;
 public class UserCreationResponse {
     private String status;
     private LocalDateTime timestamp;
-    private String token;
     private UserRole role;
 
     public UserCreationResponse()
@@ -15,10 +14,9 @@ public class UserCreationResponse {
         
     }
 
-    public UserCreationResponse(String status, LocalDateTime timestamp, String token, UserRole role) {
+    public UserCreationResponse(String status, LocalDateTime timestamp, UserRole role) {
         this.status = status;
         this.timestamp = timestamp;
-        this.token = token;
         this.role = role;
     }
     public String getStatus() {
@@ -32,12 +30,6 @@ public class UserCreationResponse {
     }
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
-    }
-    public String getToken() {
-        return token;
-    }
-    public void setToken(String token) {
-        this.token = token;
     }
     public UserRole getRole() {
         return role;

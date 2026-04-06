@@ -1,16 +1,13 @@
 package com.eventbooking.eventbooking.Event.Dto.Request;
 
 import java.time.LocalDateTime;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 
 public class UpdateEventRequest {
-    @NotBlank
+
     private String eventName;
-    @NotBlank
     private String artistName;
-    @NotBlank
     private String venue;
     @NotNull
     private Integer totalCapacity;

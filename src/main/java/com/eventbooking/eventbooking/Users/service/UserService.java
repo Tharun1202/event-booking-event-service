@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.eventbooking.eventbooking.Security.JwtService;
+import com.eventbooking.eventbooking.Users.Dto.Request.CreateAdminUser;
 import com.eventbooking.eventbooking.Users.Dto.Request.CreateUser;
 import com.eventbooking.eventbooking.Users.Dto.Request.LoginRequest;
 import com.eventbooking.eventbooking.Users.Dto.Response.LoginResponse;
@@ -76,6 +77,40 @@ public class UserService {
         return response;
     }
 
+    @Transactional
+    public UserCreationResponse createAdmin(CreateAdminUser request)
+    {
+
+        if(userrepo.findById(request.getUserId()).get().getRole()!=UserRole.SUPERADMIN)
+        {
+            throw new IllegalArgumentException("This userid doesn't have required permission to create ADMIN");
+        }
+        if(userrepo.existsByUsername(request.getUsername()))
+        {
+            throw new IllegalArgumentException("Username Already exists!!!");
+        }
+        if(userrepo.existsByEmail(request.getEmail()))
+        {
+            throw new IllegalArgumentException("E-mail already exists ... try using a different e-mail");
+        }
+        User user = new User();
+        user.setEmail(request.getEmail());
+        user.setUsername(request.getUsername());
+        user.setPasswordHash(encoder.encode(request.getPassword()));
+        user.setRole(UserRole.ADMIN);
+        LocalDateTime time = timestamp();
+        user.setCreatedAt(time);
+        user.setUpdatedAt(time);
+        userrepo.save(user);
+
+        UserCreationResponse response = new UserCreationResponse();
+        response.setStatus("SUCCESS");
+        response.setRole(UserRole.ADMIN);
+        response.setTimestamp(time);
+
+        return response;
+    }
+   
 
 
     public LocalDateTime timestamp()

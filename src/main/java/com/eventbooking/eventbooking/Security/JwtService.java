@@ -1,18 +1,26 @@
 package com.eventbooking.eventbooking.Security;
 
 import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.eventbooking.eventbooking.Users.model.UserRole;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.SignatureAlgorithm;
+
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 
 @Service
 public class JwtService {
     
-    private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final Key key;
+
+    public JwtService(@Value("${jwt.secret}") String secret) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    }
+    
     public String generateJWTToken(String userid ,String username ,UserRole role)
     {
        String token =  Jwts.builder().setSubject(username).claim("role",role.name()).claim("userid",userid).setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis()+
@@ -38,7 +46,8 @@ public class JwtService {
 
     public UserRole getRole(Claims claims)
     {
-        return claims.get("role",UserRole.class);
+        String role = claims.get("role",String.class);
+        return UserRole.valueOf(role);
     }
 
     public String getUsername(Claims claims)

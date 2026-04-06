@@ -4,10 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.eventbooking.eventbooking.Event.Dto.Request.CreateEventRequest;
 import com.eventbooking.eventbooking.Event.Dto.Request.UpdateEventRequest;
 import com.eventbooking.eventbooking.Event.Dto.Response.AdminEventResponse;
@@ -15,7 +13,6 @@ import com.eventbooking.eventbooking.Event.Dto.Response.EventResponse;
 import com.eventbooking.eventbooking.Event.model.Event;
 import com.eventbooking.eventbooking.Event.model.EventStatus;
 import com.eventbooking.eventbooking.Event.repository.EventRepository;
-
 import jakarta.transaction.Transactional;
 
 @Service
@@ -104,6 +101,34 @@ public class EventService {
         return response;
     }
 
+    public EventResponse getEventById(Integer Id)
+    {
+        Event event = eventrepo.findById(Id).get();
+        boolean isAvailable = false;
+        int seats = 0;
+        if(event==null)
+        {
+            throw new IllegalArgumentException("Event id not found");
+        }
+        if(event.getBookedCount()<event.getTotalCapacity())
+        {
+            isAvailable= true;
+            seats = event.getTotalCapacity() - event.getBookedCount();
+        }
+        EventResponse response = new EventResponse();
+        response.setEventId(Id);
+        response.setArtistName(event.getArtistName());
+        response.setEventName(event.getEventName());
+        response.setVenue(event.getVenue());
+        response.setBookable(isAvailable);
+        response.setRemainingSeats(seats);
+        response.setStartDateTime(event.getStartDateTime());
+        response.setEndDateTime(event.getEndDateTime());
+
+        return response;
+
+    }
+
     public List<AdminEventResponse> getActiveEventsForAdmins()
     {
         List<Event> event = eventrepo.findByStatusAndEndDateTimeAfterOrderByStartDateTimeAsc(EventStatus.ACTIVE,LocalDateTime.now());
@@ -137,15 +162,15 @@ public class EventService {
         {
             throw new IllegalArgumentException("Cannot update this event");
         }
-        if(request.getEventName()!=null)
+        if(!request.getEventName().trim().isBlank())
         {
             event.setEventName(request.getEventName());
         }
-        if(request.getArtistName()!=null)
+        if(!request.getArtistName().trim().isBlank())
         {
             event.setArtistName(request.getArtistName());
         }
-        if(request.getVenue()!=null)
+        if(!request.getVenue().trim().isBlank())
         {
             event.setVenue(request.getVenue());
         }

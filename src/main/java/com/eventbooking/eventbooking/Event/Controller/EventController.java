@@ -91,4 +91,16 @@ public class EventController {
          
     }
 
+    @GetMapping("/event/{id}")
+    public ResponseEntity<ApiResponse<EventResponse>> getEventById(@PathVariable Integer id)
+    {
+        ApiResponse<EventResponse> response = new ApiResponse<>();
+        response.setData(eventservice.getEventById(id));
+        response.setStatusCode(200);
+        response.setMessage("Fetching the data from database...");
+        response.setStatus("SUCCESS");
+        
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 }

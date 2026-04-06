@@ -121,23 +121,15 @@ public class PaymentService {
 
    public String paymentProcessing(CreatePaymentRequest request , Double amount)
    {
+        String token = "";
         if(Long.toString(request.getCardNumber()).length()==16)
         {
          if(Integer.toString(request.getCvv()).length()==3)
             {
-                return java.util.UUID.randomUUID().toString();
-            }
-            else
-                {
-                    return "";
-                    //throw new IllegalArgumentException("Invalid CVV !!!!");
-                }   
+                token = java.util.UUID.randomUUID().toString();
+            }   
         }
-        else
-        {
-            return "";
-            //throw new IllegalArgumentException("Invalid card number!!!");
-        }
+        return token;
    }
 
    public LocalDateTime timestamp()

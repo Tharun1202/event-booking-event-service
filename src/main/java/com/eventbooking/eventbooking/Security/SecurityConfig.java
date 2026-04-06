@@ -18,12 +18,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception {
         http.csrf(csfr ->csfr.disable()).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll().requestMatchers("/user/login").permitAll()
-        .requestMatchers("/admin/events/**").hasRole("ADMIN")
-        .requestMatchers("/admin/create").hasRole("ADMIN")
+        .authorizeHttpRequests(auth -> auth.requestMatchers("/user/register").permitAll().requestMatchers("/auth/login").permitAll()
+        .requestMatchers("/admin/register").permitAll()
+        .requestMatchers("/admin/**").hasRole("ADMIN")
         .requestMatchers("/events/bookings").hasRole("ADMIN")
-        .requestMatchers("/events/**").hasAnyRole("USER", "ADMIN","SUPERADMIN")
-        .requestMatchers("/payments/**").hasAnyRole("USER", "ADMIN","SUPERADMIN").anyRequest().authenticated())
+        .requestMatchers("/event/**").hasAnyRole("USER", "ADMIN","SUPERADMIN")
+        .requestMatchers("/payments/*").hasAnyRole("USER", "ADMIN","SUPERADMIN").anyRequest().authenticated())
         .addFilterBefore(filter,UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

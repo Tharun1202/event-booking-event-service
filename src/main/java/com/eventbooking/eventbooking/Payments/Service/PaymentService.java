@@ -3,11 +3,13 @@ package com.eventbooking.eventbooking.Payments.Service;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.eventbooking.eventbooking.Booking.models.Booking;
 import com.eventbooking.eventbooking.Booking.models.BookingStatus;
 import com.eventbooking.eventbooking.Booking.repository.BookingRepository;
+import com.eventbooking.eventbooking.Notification.Service.NotificationService;
 import com.eventbooking.eventbooking.Payments.Dto.Request.CreatePaymentRequest;
 import com.eventbooking.eventbooking.Payments.Dto.Response.PaymentResponse;
 import com.eventbooking.eventbooking.Payments.Repository.PaymentRepository;
@@ -25,6 +27,12 @@ public class PaymentService {
     PaymentRepository paymentrepo;
     @Autowired
     BookingRepository bookrepo;
+    @Autowired
+    NotificationService notificationService;
+    @Value("${spring.mail.password}")
+    String pass;
+    @Value("${spring.mail.username}")
+    String email;
 
   
     /*
@@ -78,7 +86,7 @@ public class PaymentService {
         throw new IllegalArgumentException("Payment is already completed for this booking....");
     }
      // TODO :  add price table with event id as a foreign key . there can be multiple types of booking option(regular, premier , luxury)
-     //for now i'll use a fixed price
+     //for now i'll use fixed price
     double price = book.getQuantity()*100.0;
     
     Payment pay =  new Payment();
@@ -113,6 +121,13 @@ public class PaymentService {
     response.setStatus(pay.getStatus());
     response.setTransactionId(transactionid);
     response.setCreatedAt(time);
+
+    System.out.println("email:"+email);
+    System.out.println("password:"+pass);
+    System.out.println("MAIL HOST: " + System.getProperty("spring.mail.host"));
+
+    notificationService.testmail("lenzalwin@outlook.com", "Payment Confirmation","<h1>Your Payment is confirmed</h1><p>Payment ID: 123</p>");
+
 
     return response;
     

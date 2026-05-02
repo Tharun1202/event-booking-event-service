@@ -9,13 +9,16 @@ import org.springframework.stereotype.Service;
 import com.eventbooking.eventbooking.Booking.models.Booking;
 import com.eventbooking.eventbooking.Booking.models.BookingStatus;
 import com.eventbooking.eventbooking.Booking.repository.BookingRepository;
+import com.eventbooking.eventbooking.Notification.Dto.Request.BookingConfirmationRequest;
 import com.eventbooking.eventbooking.Notification.Service.NotificationService;
 import com.eventbooking.eventbooking.Payments.Dto.Request.CreatePaymentRequest;
 import com.eventbooking.eventbooking.Payments.Dto.Response.PaymentResponse;
 import com.eventbooking.eventbooking.Payments.Repository.PaymentRepository;
 import com.eventbooking.eventbooking.Payments.model.Payment;
 import com.eventbooking.eventbooking.Payments.model.PaymentStatus;
-
+import com.eventbooking.eventbooking.Users.repository.UserRepository;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import jakarta.transaction.Transactional;
 
@@ -27,6 +30,8 @@ public class PaymentService {
     PaymentRepository paymentrepo;
     @Autowired
     BookingRepository bookrepo;
+    @Autowired 
+    UserRepository userrepo;
     @Autowired
     NotificationService notificationService;
     @Value("${spring.mail.password}")
@@ -97,9 +102,9 @@ public class PaymentService {
     pay.setIdempotentKey(request.getidempotentKey());
     paymentrepo.save(pay);
 
-    String transactionid = paymentProcessing(request,price);
+    String transactionid = paymentSimulation(request,price);
     LocalDateTime time = timestamp();
-    if(transactionid.isEmpty())
+    if(transactionid == null || transactionid.isEmpty())
     {
         pay.setStatus(PaymentStatus.FAILED);
         pay.setUpdatedAt(time);
@@ -113,7 +118,20 @@ public class PaymentService {
     book.setStatus(BookingStatus.COMPLETED);
     bookrepo.save(book);
     }
-    
+    if(pay.getStatus() == PaymentStatus.SUCCESS)
+{
+    BookingConfirmationRequest req = new BookingConfirmationRequest();
+    req.setBooking(book);
+    req.setUser(userrepo.findById(book.getUserId()).orElseThrow());
+
+    TransactionSynchronizationManager.registerSynchronization(
+        new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                notificationService.sendBookingConfirmation(req);
+            }
+        });
+    }
     PaymentResponse response = new PaymentResponse();
     response.setAmount(price);
     response.setBookingId(request.getBookingId());
@@ -122,11 +140,11 @@ public class PaymentService {
     response.setTransactionId(transactionid);
     response.setCreatedAt(time);
 
-    System.out.println("email:"+email);
-    System.out.println("password:"+pass);
-    System.out.println("MAIL HOST: " + System.getProperty("spring.mail.host"));
-
-    notificationService.testmail("lenzalwin@outlook.com", "Payment Confirmation","<h1>Your Payment is confirmed</h1><p>Payment ID: 123</p>");
+    //System.out.println("email:"+email);
+    //System.out.println("password:"+pass);
+    //System.out.println("MAIL HOST: " + System.getProperty("spring.mail.host"));
+    
+    //notificationService.sendmail("lenzalwin@outlook.com", "Payment Confirmation","<h1>Your Payment is confirmed</h1><p>Payment ID: 123</p>");
 
 
     return response;
@@ -134,7 +152,8 @@ public class PaymentService {
 
    }
 
-   public String paymentProcessing(CreatePaymentRequest request , Double amount)
+
+   public String paymentSimulation(CreatePaymentRequest request , Double amount)
    {
         String token = "";
         if(Long.toString(request.getCardNumber()).length()==16)

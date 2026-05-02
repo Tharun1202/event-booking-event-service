@@ -8,8 +8,14 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
+@Table(name = "notification",
+    uniqueConstraints = @UniqueConstraint(
+    columnNames = {"bookingId", "type"})
+)
 public class Notification {
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)

@@ -16,6 +16,7 @@ import com.eventbooking.eventbooking.Booking.repository.BookingRepository;
 import com.eventbooking.eventbooking.Event.model.Event;
 import com.eventbooking.eventbooking.Event.model.EventStatus;
 import com.eventbooking.eventbooking.Event.repository.EventRepository;
+import com.eventbooking.eventbooking.Users.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -25,11 +26,17 @@ public class BookingService {
     BookingRepository bookingrepo;
     @Autowired
     EventRepository eventrepo;
+    @Autowired
+    UserRepository userrepo;
     
     
     @Transactional
     public BookingResponse bookevent(CreateBookingRequest request)
     {
+        if(userrepo.findById(request.getUserId()).isEmpty())
+        {
+            throw new IllegalArgumentException("userId doesn't exists");
+        }
         Event event = eventrepo.findByEventId(request.getEventId()).orElseThrow();
         Booking book = new Booking();
         if(event.getStatus()==EventStatus.ACTIVE)

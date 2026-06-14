@@ -44,7 +44,7 @@ public class PaymentService {
     what should this Service accomplish?
     it should confirm booking for a event.
     how does it do it?
-    it first gets the payment info(card) from user and verifies if it valid then payment info is sent to the payment processor(mock).
+    it first gets the payment info(card) from user and verifies if valid data is sent then payment info is sent to the payment processor(mock).
     if the payment is successful then payment processor would send a webhook which would confirm the transaction. After reciving this transaction payment
     service should confirm this booking by updating the status in bookings table and adding a record in the payment table. Both of this should occur in a single transaction also i should use a lock so that it would avoid any RACE conditions .
     If the payment has failed then it should be added in the payment table with a failed status or we can ignore it.
@@ -91,7 +91,7 @@ public class PaymentService {
         throw new IllegalArgumentException("Payment is already completed for this booking....");
     }
      // TODO :  add price table with event id as a foreign key . there can be multiple types of booking option(regular, premier , luxury)
-     //for now i'll use fixed price
+     //for now i'll use a constant
     double price = book.getQuantity()*100.0;
     
     Payment pay =  new Payment();

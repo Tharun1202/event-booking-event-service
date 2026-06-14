@@ -16,6 +16,11 @@ import com.eventbooking.eventbooking.Booking.repository.BookingRepository;
 import com.eventbooking.eventbooking.Event.model.Event;
 import com.eventbooking.eventbooking.Event.model.EventStatus;
 import com.eventbooking.eventbooking.Event.repository.EventRepository;
+import com.eventbooking.eventbooking.Notification.Dto.Request.RefundRequest;
+import com.eventbooking.eventbooking.Notification.Service.NotificationService;
+import com.eventbooking.eventbooking.Payments.Repository.PaymentRepository;
+import com.eventbooking.eventbooking.Payments.model.Payment;
+import com.eventbooking.eventbooking.Payments.model.PaymentStatus;
 import com.eventbooking.eventbooking.Users.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -28,6 +33,10 @@ public class BookingService {
     EventRepository eventrepo;
     @Autowired
     UserRepository userrepo;
+    @Autowired
+    PaymentRepository paymentrepo;
+    @Autowired 
+    NotificationService notification;
     
     
     @Transactional
@@ -123,16 +132,18 @@ public class BookingService {
         }
         else if(book.getStatus()==BookingStatus.CANCELLED)
         {
-            return new BookingCancellationResponse();
+            BookingCancellationResponse n = new BookingCancellationResponse();
+            n.setBookingId(bookingId);
+            n.setBookingStatus(book.getStatus());
+            n.setEventId(book.getEvent().getEventId());
+            n.setEventStatus(book.getEvent().getStatus());
+            n.setRefundInitiated(true);
+            n.setReleasedSeats(book.getQuantity());
+            return n;
         }
         else if(book.getStatus()==BookingStatus.PENDING)
         {
-            event.setBookedCount(event.getBookedCount()-book.getQuantity());
-            if(event.getTotalCapacity()>event.getBookedCount())
-            {
-                event.setStatus(EventStatus.ACTIVE);
-            }
-            book.setStatus(BookingStatus.CANCELLED);
+            throw new IllegalArgumentException("cannot cancel a booking which is not confirmed!!");
         }
         else if(book.getStatus()==BookingStatus.COMPLETED)
         {
@@ -143,6 +154,13 @@ public class BookingService {
             }
             book.setStatus(BookingStatus.CANCELLED);
             // TO-DO initiate refund for this booking.
+            Payment pay = paymentrepo.findByBook_BookingId(bookingId).orElseThrow();
+            pay.setStatus(PaymentStatus.INITIATE_REFUND);
+            RefundRequest request = new RefundRequest();
+            request.setDate(timestamp());
+            request.setPayment(pay);
+            request.setUserId(book.getUserId());
+            notification.sendRefund(request);
             refund = true;
         }
         BookingCancellationResponse response = new BookingCancellationResponse();

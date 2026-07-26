@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title style="padding-right: 450px;">Login</title>
+        <style>
+            div{
+                margin: center;
+                padding: 200px;
+                padding-left: 500px;
+                padding-top: 100px;
+            }
+        </style>
+    </head>
+    <body>
+        <p style="font-size: 200%;">Login page</p>
+        <form action = "http://localhost:8080/auth/login" method = "post">
+            <div>
+            <br> <label for="username">Username : </label>
+            <input type="text" name="username" ><br>
+           <br> <label for="password">Password: </label>
+            <input type="password" name="password"><br>
+            <br><input type="submit" value="submit" style="float:down; "><br>
+            </div>
+        </form>
+    </body>
+</html>

@@ -12,23 +12,24 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.eventbooking.eventbooking.Event.Dto.Request.CreateEventRequest;
-import com.eventbooking.eventbooking.Event.Dto.Response.AdminEventResponse;
-import com.eventbooking.eventbooking.Event.Dto.Response.EventResponse;
-import com.eventbooking.eventbooking.Event.model.Event;
-import com.eventbooking.eventbooking.Event.model.EventStatus;
-import com.eventbooking.eventbooking.Event.repository.EventRepository;
-import com.eventbooking.eventbooking.Event.service.EventService;
+import com.eventservice.eventservice.Event.Dto.Request.CreateEventRequest;
+import com.eventservice.eventservice.Event.Dto.Response.AdminEventResponse;
+import com.eventservice.eventservice.Event.Dto.Response.EventResponse;
+import com.eventservice.eventservice.Event.model.Event;
+import com.eventservice.eventservice.Event.model.EventStatus;
+import com.eventservice.eventservice.Event.repository.EventRepository;
+import com.eventservice.eventservice.Event.service.EventService;
 
 @ExtendWith(MockitoExtension.class)
 class EventbookingApplicationTests {
+
 
 	@Mock
 	EventRepository eventrepo;
 
 	@InjectMocks
 	EventService eventservice;
-
+	
 	@Test
 	void contextLoads() {
 	}
@@ -82,8 +83,6 @@ class EventbookingApplicationTests {
 	{
 		//arrange
 		CreateEventRequest request = new CreateEventRequest();
-		AdminEventResponse resp = new AdminEventResponse();
-		Event e1 = new Event();
 		request.setArtistName("abcd");
 		request.setEventName("kfsfo");
 		request.setTotalCapacity(125);
